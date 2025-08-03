@@ -79,6 +79,24 @@ const router = createRouter({
             },
           ],
         },
+        {
+          path: 'master',
+          meta: {
+            isAuth: true,
+            coreSystem: 'CoreSystem',
+          },
+          component: MasterLayout,
+          children: [
+            {
+              path: 'branch',
+              name: 'branch',
+              meta: {
+                label: 'Branch',
+              },
+              component: () => import('@/pages/Master/Branch/Index.vue'),
+            },
+          ]
+        }
       ],
     },
   ],

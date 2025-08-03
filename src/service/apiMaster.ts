@@ -5,15 +5,15 @@ import { createPinia } from 'pinia';
 import { useAppStore } from '@/stores/app';
 import router from '@/router';
 
-const baseUrl = import.meta.env.VITE_APP_BACKEND_URL;
+const baseUrl = import.meta.env.VITE_APP_BACKEND_URL_MASTER;
 const pinia = createPinia();
 const store = useAppStore(pinia);
 
-const api = axios.create({
+const apiMaster = axios.create({
   baseURL: `${baseUrl}/api`,
 });
 
-api.interceptors.request.use((config) => {
+apiMaster.interceptors.request.use((config) => {
   config.withCredentials = true;
 
   return config;
@@ -22,7 +22,7 @@ api.interceptors.request.use((config) => {
 let isRefreshing = false;
 let failedQueue: (() => void)[] = [];
 
-api.interceptors.response.use(
+apiMaster.interceptors.response.use(
   (res) => {
     return res;
   },
@@ -50,7 +50,7 @@ api.interceptors.response.use(
               });
             }
 
-            return api(error.config);
+            return apiMaster(error.config);
           })
           .catch(() => {
             isRefreshing = false;
@@ -59,7 +59,7 @@ api.interceptors.response.use(
         // Menunggu refresh token selesai, simpan permintaan yang gagal
         return new Promise((resolve) => {
           failedQueue.push(() => {
-            resolve(api(error.config));
+            resolve(apiMaster(error.config));
           });
         });
       }
@@ -92,4 +92,4 @@ api.interceptors.response.use(
   }
 );
 
-export { api };
+export { apiMaster };

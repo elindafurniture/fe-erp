@@ -7,6 +7,9 @@ services:
     build:
       context: .
       dockerfile: docker/vue/Dockerfile
+      args:
+        VITE_APP_BACKEND_URL: ${VITE_APP_BACKEND_URL}
+        VITE_APP_BACKEND_URL_MASTER: ${VITE_APP_BACKEND_URL_MASTER}
   
   fe_erp_nginx:
     container_name: fe_erp_nginx
