@@ -11,10 +11,19 @@ const store = useAppStore(pinia);
 
 const apiMaster = axios.create({
   baseURL: `${baseUrl}/api`,
+  headers: {
+    'Accept': 'application/json',
+  },
 });
 
 apiMaster.interceptors.request.use((config) => {
   config.withCredentials = true;
+
+  // Handle multipart/form-data properly
+  if (config.data instanceof FormData) {
+    // Don't set Content-Type for FormData, let browser set it with boundary
+    delete config.headers['Content-Type'];
+  }
 
   return config;
 });
